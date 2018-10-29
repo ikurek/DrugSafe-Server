@@ -23,5 +23,4 @@ public class BeanConfiguration {
         return new ObjectMapper();
     }
 
-
 }

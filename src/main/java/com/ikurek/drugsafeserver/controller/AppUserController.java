@@ -2,9 +2,10 @@ package com.ikurek.drugsafeserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ikurek.drugsafeserver.exceptions.UserAlreadyExistsException;
+import com.ikurek.drugsafeserver.exception.UserAlreadyExistsException;
 import com.ikurek.drugsafeserver.model.AppUser;
 import com.ikurek.drugsafeserver.repository.AppUserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/")
+@Slf4j
 public class AppUserController {
 
     private AppUserRepository appUserRepository;
@@ -39,7 +41,7 @@ public class AppUserController {
 
             // Save user if not
             AppUser savedUser = appUserRepository.save(appUser);
-            System.out.println("DrugSafe-Server: Saved " + appUser.getEmail());
+            log.info("User " + appUser.getEmail() + " registered");
 
             // Return user as JSON
             return objectMapper.writeValueAsString(savedUser);
@@ -49,7 +51,9 @@ public class AppUserController {
     }
 
     @GetMapping("/v1/validate")
-    public void validateToken() {
-        System.out.println("DrugSafe-Server: Checking token validity ");
+    public void validateToken(@RequestBody AppUser appUser) {
+
+        log.info("User " + appUser.getEmail() + " requested token validation");
+
     }
 }

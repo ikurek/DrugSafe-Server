@@ -1,4 +1,4 @@
-package com.ikurek.drugsafeserver.exceptions;
+package com.ikurek.drugsafeserver.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
