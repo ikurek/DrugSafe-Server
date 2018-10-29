@@ -11,7 +11,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +24,7 @@ public class DataSourceParser {
     private Document document;
 
     // List storing all POJOs
-    private ArrayList<Drug> listOfDrugs = new ArrayList<>();
+    private Set<Drug> listOfDrugs = new HashSet<>();
     private String creationDate = new String();
 
     // Temporary variables to awoid constant recreation
@@ -45,7 +44,7 @@ public class DataSourceParser {
         }
     }
 
-    public void run() {
+    public Set<Drug> run() {
         File file = new File(FILE_NAME);
 
         try {
@@ -55,6 +54,7 @@ public class DataSourceParser {
             e.printStackTrace();
         }
 
+        return this.listOfDrugs;
     }
 
     public void parseDocument() {
@@ -213,9 +213,5 @@ public class DataSourceParser {
         }
 
 
-    }
-
-    public ArrayList<Drug> getListOfDrugs() {
-        return listOfDrugs;
     }
 }

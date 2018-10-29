@@ -1,5 +1,7 @@
 package com.ikurek.drugsafeserver.dataupdater;
 
+import com.ikurek.drugsafeserver.model.Drug;
+import com.ikurek.drugsafeserver.repository.DrugRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Set;
 
 
 @Service
@@ -14,9 +17,11 @@ import java.util.Arrays;
 public class DataUpdateService {
 
     private Environment environment;
+    private DrugRepository drugRepository;
 
-    public DataUpdateService(Environment environment) {
+    public DataUpdateService(Environment environment, DrugRepository drugRepository) {
         this.environment = environment;
+        this.drugRepository = drugRepository;
     }
 
     @PostConstruct
@@ -42,8 +47,10 @@ public class DataUpdateService {
             log.info("Building parser");
             DataSourceParser dataSourceParser = new DataSourceParser();
             log.info("Parsing");
-            dataSourceParser.run();
-            log.info("Parsed " + dataSourceParser.getListOfDrugs().size() + " elements");
+            Set<Drug> drugs = dataSourceParser.run();
+
+
+            drugRepository.saveAll(drugs);
         }
 
 
