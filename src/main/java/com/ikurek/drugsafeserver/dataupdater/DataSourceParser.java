@@ -2,7 +2,6 @@ package com.ikurek.drugsafeserver.dataupdater;
 
 import com.ikurek.drugsafeserver.model.Drug;
 import com.ikurek.drugsafeserver.model.Packaging;
-import com.ikurek.drugsafeserver.model.Substance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,8 +29,8 @@ public class DataSourceParser {
     // Temporary variables to awoid constant recreation
     private Drug tempDrug;
     private Packaging tempPackaging;
-    private Substance tempSubstance;
-    private Set<Substance> tempListOfSubstances;
+    private String tempSubstance;
+    private Set<String> tempListOfSubstances;
     private Set<Packaging> tempListOfPackagings;
 
 
@@ -100,9 +99,9 @@ public class DataSourceParser {
         }
 
         try {
-            tempDrug.setGovernmentId(Long.parseLong(productElement.getAttribute("id")));
+            tempDrug.setId(Long.parseLong(productElement.getAttribute("id")));
         } catch (NumberFormatException nfe) {
-            tempDrug.setGovernmentId(null);
+            tempDrug.setId(null);
         }
 
         tempDrug.setName(getProperAttributeValueFromElement(productElement, "nazwaProduktu"));
@@ -118,7 +117,7 @@ public class DataSourceParser {
 
     private void parseSubstancesFromElement(Element productElement) {
         // Rebuild temporary variables
-        tempSubstance = new Substance();
+        tempSubstance = new String();
         tempListOfSubstances = new HashSet<>();
 
         // Find element that represents substances node
@@ -126,8 +125,7 @@ public class DataSourceParser {
 
         // Iterate over all substances
         for (int i = 0; i < substancesNode.getElementsByTagName("substancjaCzynna").getLength(); i++) {
-            tempSubstance = new Substance();
-            tempSubstance.setName(substancesNode.getElementsByTagName("substancjaCzynna").item(i).getTextContent());
+            tempSubstance = substancesNode.getElementsByTagName("substancjaCzynna").item(i).getTextContent();
             tempListOfSubstances.add(tempSubstance);
         }
 
@@ -166,9 +164,9 @@ public class DataSourceParser {
         }
 
         try {
-            tempPackaging.setPackageId(Long.parseLong(packageElement.getAttribute("id")));
+            tempPackaging.setId(Long.parseLong(packageElement.getAttribute("id")));
         } catch (NumberFormatException nfe) {
-            tempPackaging.setPackageId(null);
+            tempPackaging.setId(null);
         }
 
         switch (packageElement.getAttribute("skasowane")) {

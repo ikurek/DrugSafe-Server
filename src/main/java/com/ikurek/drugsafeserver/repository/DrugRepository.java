@@ -9,10 +9,11 @@ import java.util.Set;
 @Repository
 public interface DrugRepository extends JpaRepository<Drug, Long> {
 
-    Drug findByGovernmentId(Long governmentId);
 
-    Set<Drug> findAllByNameContainsOrCommonNameContains(String contained);
+    Set<Drug> findAllByNameContainsOrCommonNameContains(String containedInName, String containedInCommonName);
 
     Set<Drug> findAllByCommonNameContains(String contained);
+
+    Set<Drug> findAllBySubstancesContaining(String contained);
 
 }

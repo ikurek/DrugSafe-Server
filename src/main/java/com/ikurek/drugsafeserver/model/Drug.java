@@ -13,12 +13,8 @@ import java.util.Set;
 public class Drug implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DRUG_ID")
     private Long id;
-
-    @Column(name = "GOVERMENT_ID")
-    private Long governmentId; // id
 
     @Column(name = "NAME")
     private String name; // nazwaProduktu
@@ -50,14 +46,8 @@ public class Drug implements Serializable {
     @Column(name = "ATC")
     private String atc; // kodATC
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "drug_substance",
-            joinColumns = {@JoinColumn(name = "DRUG_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "SUBSTANCE_ID", nullable = false, updatable = false)})
-    private Set<Substance> substances = new HashSet<>();
+    @ElementCollection(targetClass = String.class)
+    private Set<String> substances = new HashSet<>();
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

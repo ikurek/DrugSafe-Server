@@ -14,12 +14,8 @@ import java.util.Set;
 public class Packaging implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PACKAGING_ID")
     Long id;
-
-    @Column(name = "GOVERNMENT_ID")
-    Long packageId; // id
 
     @Column(name = "SIZE")
     Long size; // wielkosc

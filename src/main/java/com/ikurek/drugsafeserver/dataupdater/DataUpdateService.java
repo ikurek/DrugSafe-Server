@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Set;
 
 @Component
@@ -19,10 +18,10 @@ public class DataUpdateService {
         this.drugService = drugService;
     }
 
-    @PostConstruct
-    public void bootUpdate() {
-        updateDatabase();
-    }
+    //@PostConstruct
+    //public void bootUpdate() {
+    //    updateDatabase();
+    //}
 
     @Scheduled(cron = "0 0 * * * *")
     public void scheduledUpdate() {
