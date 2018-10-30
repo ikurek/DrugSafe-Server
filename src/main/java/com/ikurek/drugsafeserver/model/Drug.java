@@ -29,7 +29,7 @@ public class Drug implements Serializable {
     @Column(name = "DRUG_TYPE")
     private String drugType; // rodzajPreparatu
 
-    @Column(name = "AMMOUNT_OF_SUBSTANCE")
+    @Column(name = "AMMOUNT_OF_SUBSTANCE", length = 512)
     private String ammountOfSubstance; // moc
 
     @Column(name = "TYPE")

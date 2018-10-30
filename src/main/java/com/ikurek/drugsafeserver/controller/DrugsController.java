@@ -7,9 +7,7 @@ import com.ikurek.drugsafeserver.exception.EmptyRequestBodyException;
 import com.ikurek.drugsafeserver.exception.MalformedJsonException;
 import com.ikurek.drugsafeserver.exception.NoDataProvidedException;
 import com.ikurek.drugsafeserver.model.Drug;
-import com.ikurek.drugsafeserver.model.Packaging;
-import com.ikurek.drugsafeserver.model.Substance;
-import com.ikurek.drugsafeserver.repository.DrugRepository;
+import com.ikurek.drugsafeserver.service.DrugServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -27,37 +24,13 @@ public class DrugsController {
 
     private ObjectMapper objectMapper;
 
-    private DrugRepository drugRepository;
+    private DrugServiceImpl drugService;
 
-    public DrugsController(ObjectMapper objectMapper, DrugRepository drugRepository) {
+    public DrugsController(ObjectMapper objectMapper, DrugServiceImpl drugService) {
         this.objectMapper = objectMapper;
-        this.drugRepository = drugRepository;
+        this.drugService = drugService;
     }
 
-    @GetMapping("/v1/drugs/test")
-    public void createTestDrug() {
-
-        Set<Packaging> packagingArrayList = new HashSet<>();
-        Set<Substance> substancesArrayList = new HashSet<>();
-
-        Packaging testPackage = new Packaging();
-        testPackage.setSize(10L);
-        packagingArrayList.add(testPackage);
-
-        Substance testSubstance = new Substance();
-        testSubstance.setName("test");
-        substancesArrayList.add(testSubstance);
-
-        Drug drug = new Drug();
-        drug.setName("test");
-        drug.setPackaging(packagingArrayList);
-        drug.setSubstances(substancesArrayList);
-
-        Drug savedDrug = drugRepository.save(drug);
-
-        log.info("Saved " + savedDrug.getId());
-
-    }
 
     @GetMapping("/v1/drugs")
     public String getDrugsByName(@RequestBody String json) {
@@ -79,7 +52,7 @@ public class DrugsController {
         if (name == null || name.trim().isEmpty()) throw new NoDataProvidedException();
 
         // Find drug with specified name
-        Set<Drug> foundDrugs = drugRepository.findAllByNameContains(name);
+        Set<Drug> foundDrugs = drugService.getDrugsWhereNameOrSubstanceContains(name);
         log.info("Found " + foundDrugs.size() + " drugs for name " + name);
 
         // Map drugs to json and return

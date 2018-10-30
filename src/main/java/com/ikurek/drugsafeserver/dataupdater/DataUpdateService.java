@@ -1,27 +1,22 @@
 package com.ikurek.drugsafeserver.dataupdater;
 
 import com.ikurek.drugsafeserver.model.Drug;
-import com.ikurek.drugsafeserver.repository.DrugRepository;
+import com.ikurek.drugsafeserver.service.DrugServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Set;
 
-
-@Service
+@Component
 @Slf4j
 public class DataUpdateService {
 
-    private Environment environment;
-    private DrugRepository drugRepository;
+    private final DrugServiceImpl drugService;
 
-    public DataUpdateService(Environment environment, DrugRepository drugRepository) {
-        this.environment = environment;
-        this.drugRepository = drugRepository;
+    public DataUpdateService(DrugServiceImpl drugService) {
+        this.drugService = drugService;
     }
 
     @PostConstruct
@@ -34,9 +29,8 @@ public class DataUpdateService {
         updateDatabase();
     }
 
-    private void updateDatabase() {
+    public void updateDatabase() {
 
-        if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
             log.info("Running database update task");
             log.info("Building downloader");
             DataSourceDownloader dataSourceDownloader = new DataSourceDownloader();
@@ -48,10 +42,12 @@ public class DataUpdateService {
             DataSourceParser dataSourceParser = new DataSourceParser();
             log.info("Parsing");
             Set<Drug> drugs = dataSourceParser.run();
+        log.info("Parsed " + drugs.size() + " drugs");
 
+        //FIXME: No batch update operation? Really JPA? Really???
+        drugService.merge(drugs);
 
-            drugRepository.saveAll(drugs);
-        }
+        log.info("Storing " + drugService.getDrugCount() + " drugs in database");
 
 
     }

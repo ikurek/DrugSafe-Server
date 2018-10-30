@@ -1,5 +1,6 @@
 package com.ikurek.drugsafeserver.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,6 +45,7 @@ public class Packaging implements Serializable {
     @Column
     @ElementCollection(targetClass = Drug.class)
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drugs")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     Set<Drug> drugs = new HashSet<>();
 
 }
