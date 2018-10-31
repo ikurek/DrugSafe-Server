@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,7 +25,27 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public void merge(Set<Drug> drugs) {
 
-        drugRepository.saveAll(drugs);
+        int PARTITIONS_COUNT = 10;
+        int index = 0;
+        List<Set<Drug>> sets = new ArrayList<Set<Drug>>(PARTITIONS_COUNT);
+
+        for (int i = 0; i < PARTITIONS_COUNT; i++) {
+            sets.add(new HashSet<Drug>());
+        }
+
+        index = 0;
+        for (Drug drug : drugs) {
+            sets.get(index++ % PARTITIONS_COUNT).add(drug);
+        }
+
+        index = 0;
+        for (Set<Drug> set : sets) {
+            drugRepository.saveAll(set);
+            index++;
+            log.info("Update progress: " + (index * 10) + "%");
+        }
+
+
     }
 
     @Override
