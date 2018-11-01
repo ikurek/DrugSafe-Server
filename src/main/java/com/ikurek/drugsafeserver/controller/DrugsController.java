@@ -3,16 +3,14 @@ package com.ikurek.drugsafeserver.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ikurek.drugsafeserver.exception.DataNotFoundException;
 import com.ikurek.drugsafeserver.exception.EmptyRequestBodyException;
 import com.ikurek.drugsafeserver.exception.MalformedJsonException;
 import com.ikurek.drugsafeserver.exception.NoDataProvidedException;
 import com.ikurek.drugsafeserver.model.Drug;
 import com.ikurek.drugsafeserver.service.DrugServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Set;
@@ -23,7 +21,6 @@ import java.util.Set;
 public class DrugsController {
 
     private ObjectMapper objectMapper;
-
     private DrugServiceImpl drugService;
 
     public DrugsController(ObjectMapper objectMapper, DrugServiceImpl drugService) {
@@ -55,12 +52,36 @@ public class DrugsController {
         Set<Drug> foundDrugs = drugService.getDrugsWhereNameOrSubstanceContains(name);
         log.info("Found " + foundDrugs.size() + " drugs for name " + name);
 
-        // Map drugs to json and return
-        try {
-            return objectMapper.writeValueAsString(foundDrugs);
-        } catch (JsonProcessingException e) {
-            return e.getMessage();
+        // Check if anything was found
+        if (foundDrugs.isEmpty()) {
+            throw new DataNotFoundException();
+        } else {
+            // Map drugs to json and return
+            try {
+                return objectMapper.writeValueAsString(foundDrugs);
+            } catch (JsonProcessingException e) {
+                return e.getMessage();
+            }
         }
+    }
+
+    @GetMapping("/v1/drugs/{id}")
+    public String getSingleDrugById(@PathVariable Long id) {
+
+        // Query for drug by ID
+        Drug drug = drugService.getDrugWithId(id);
+
+        // Check if drug was found
+        if (drug == null) {
+            throw new DataNotFoundException();
+        } else {
+            try {
+                return objectMapper.writeValueAsString(drug);
+            } catch (JsonProcessingException e) {
+                return e.getMessage();
+            }
+        }
+
 
     }
 }

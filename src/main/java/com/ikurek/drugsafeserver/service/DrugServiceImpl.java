@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -59,5 +56,12 @@ public class DrugServiceImpl implements DrugService {
         Set<Drug> finalSet = drugRepository.findAllByNameContainsOrCommonNameContains(contained, contained);
 
         return finalSet;
+    }
+
+    @Override
+    public Drug getDrugWithId(Long id) {
+        Optional<Drug> optionalDrug = drugRepository.findById(id);
+
+        return optionalDrug.orElse(null);
     }
 }
