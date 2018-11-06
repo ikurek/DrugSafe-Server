@@ -24,7 +24,7 @@ public class DataUpdateService {
         updateDatabase();
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 2 * * ?")
     public void scheduledUpdate() {
         updateDatabase();
     }

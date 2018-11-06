@@ -53,7 +53,7 @@ public class DrugServiceImpl implements DrugService {
     @Override
     public Set<Drug> getDrugsWhereNameOrSubstanceContains(String contained) {
 
-        Set<Drug> finalSet = drugRepository.findAllByNameContainsOrCommonNameContains(contained, contained);
+        Set<Drug> finalSet = drugRepository.findAllByNameContainsIgnoreCaseOrCommonNameContainsIgnoreCase(contained, contained);
 
         return finalSet;
     }

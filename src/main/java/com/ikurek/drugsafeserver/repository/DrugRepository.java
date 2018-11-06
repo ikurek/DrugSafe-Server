@@ -10,10 +10,7 @@ import java.util.Set;
 public interface DrugRepository extends JpaRepository<Drug, Long> {
 
 
-    Set<Drug> findAllByNameContainsOrCommonNameContains(String containedInName, String containedInCommonName);
+    Set<Drug> findAllByNameContainsIgnoreCaseOrCommonNameContainsIgnoreCase(String containedInName, String containedInCommonName);
 
-    Set<Drug> findAllByCommonNameContains(String contained);
-
-    Set<Drug> findAllBySubstancesContaining(String contained);
 
 }
