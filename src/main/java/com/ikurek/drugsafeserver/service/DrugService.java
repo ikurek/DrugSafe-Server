@@ -12,5 +12,7 @@ interface DrugService {
 
     Drug getDrugWithId(Long id);
 
+    Set<Drug> getDrugsWhereCommonNameIs(String commonName);
+
     Set<Drug> getDrugsWhereNameOrSubstanceContains(String contained);
 }

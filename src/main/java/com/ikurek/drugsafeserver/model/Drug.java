@@ -50,12 +50,11 @@ public class Drug implements Serializable {
     private Set<String> substances = new HashSet<>();
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.ALL
     })
     @JoinTable(name = "drug_packaging",
-            joinColumns = {@JoinColumn(name = "DRUG_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "PACKAGING_ID", nullable = false, updatable = false)})
+            joinColumns = {@JoinColumn(name = "DRUG_ID", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "PACKAGING_ID", nullable = false)})
     private Set<Packaging> packaging = new HashSet<>();
 
 }

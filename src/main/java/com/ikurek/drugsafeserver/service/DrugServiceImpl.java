@@ -64,4 +64,9 @@ public class DrugServiceImpl implements DrugService {
 
         return optionalDrug.orElse(null);
     }
+
+    @Override
+    public Set<Drug> getDrugsWhereCommonNameIs(String commonName) {
+        return drugRepository.findAllByCommonNameIs(commonName);
+    }
 }

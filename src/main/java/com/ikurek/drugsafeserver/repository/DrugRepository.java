@@ -12,5 +12,6 @@ public interface DrugRepository extends JpaRepository<Drug, Long> {
 
     Set<Drug> findAllByNameContainsIgnoreCaseOrCommonNameContainsIgnoreCase(String containedInName, String containedInCommonName);
 
+    Set<Drug> findAllByCommonNameIs(String commonName);
 
 }

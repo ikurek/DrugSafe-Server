@@ -40,7 +40,7 @@ public class Packaging implements Serializable {
 
     @Column
     @ElementCollection(targetClass = Drug.class)
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "drugs")
+    @ManyToMany(mappedBy = "drugs")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     Set<Drug> drugs = new HashSet<>();
 

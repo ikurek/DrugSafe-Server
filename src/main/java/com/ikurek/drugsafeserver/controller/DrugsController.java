@@ -64,7 +64,25 @@ public class DrugsController {
                 return e.getMessage();
             }
         }
+    }
 
+    @GetMapping("/v1/replacements/{id}")
+    public String getDrugReplacementsByID(@PathVariable Long id) {
+        // Query for drug by ID
+        Drug drug = drugService.getDrugWithId(id);
 
+        // Check if drug was found
+        if (drug == null) {
+            throw new DataNotFoundException();
+        } else {
+
+            Set<Drug> replacements = drugService.getDrugsWhereCommonNameIs(drug.getCommonName());
+
+            try {
+                return objectMapper.writeValueAsString(replacements);
+            } catch (JsonProcessingException e) {
+                return e.getMessage();
+            }
+        }
     }
 }
