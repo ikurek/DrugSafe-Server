@@ -29,7 +29,7 @@ public class AppUserController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping("/v1/register")
+    @PostMapping("/register")
     public String signUp(@RequestBody AppUser appUser) throws JsonProcessingException {
 
         // Encrypt user password
@@ -50,7 +50,7 @@ public class AppUserController {
         }
     }
 
-    @GetMapping("/v1/validate")
+    @GetMapping("/validate")
     public void validateToken(@RequestBody AppUser appUser) {
 
         log.info("User " + appUser.getEmail() + " requested token validation");

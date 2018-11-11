@@ -25,7 +25,7 @@ public class DrugsController {
     }
 
 
-    @GetMapping("/v1/drugs")
+    @GetMapping("/drugs")
     public String getDrugsByName(@RequestParam("name") String name) {
 
         // Validate if name is present
@@ -48,7 +48,7 @@ public class DrugsController {
         }
     }
 
-    @GetMapping("/v1/drugs/{id}")
+    @GetMapping("/drugs/{id}")
     public String getSingleDrugById(@PathVariable Long id) {
 
         // Query for drug by ID
@@ -66,7 +66,7 @@ public class DrugsController {
         }
     }
 
-    @GetMapping("/v1/replacements/{id}")
+    @GetMapping("/replacements/{id}")
     public String getDrugReplacementsByID(@PathVariable Long id) {
         // Query for drug by ID
         Drug drug = drugService.getDrugWithId(id);

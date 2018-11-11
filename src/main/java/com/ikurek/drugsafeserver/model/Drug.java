@@ -50,7 +50,7 @@ public class Drug implements Serializable {
     private Set<String> substances = new HashSet<>();
 
     @ManyToMany(cascade = {
-            CascadeType.ALL
+            CascadeType.MERGE
     })
     @JoinTable(name = "drug_packaging",
             joinColumns = {@JoinColumn(name = "DRUG_ID", nullable = false)},

@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface PackagingRepository extends JpaRepository<Packaging, Long> {
 
     Packaging findBySize(Long size);
+
+    Packaging findByEan(Long ean);
 }
